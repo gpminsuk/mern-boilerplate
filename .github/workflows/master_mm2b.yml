@@ -58,4 +58,4 @@ jobs:
         app-name: 'mm2b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
-        package: ./client
+        package: ./server
