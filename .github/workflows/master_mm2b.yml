@@ -21,9 +21,16 @@ jobs:
       with:
         node-version: '14.x'
 
-    - name: npm install, build, and test
+    - name: server npm install, build, and test
       run: |
-        npm run heroku-postbuild
+        npm install
+      working-directory: server
+      
+    - name: client npm install, build, and test
+      run: |
+        npm install
+        npm build
+      working-directory: client
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
