@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Layout from '../../layout/Layout';
-import MessageList from '../../components/MessageList/MessageList';
+import CollectionList from '../../components/CollectionList/CollectionList';
 import MessageForm from '../../components/MessageForm/MessageForm';
 import { reseedDatabase } from '../../store/actions/authActions';
 
@@ -55,7 +55,7 @@ const Home = ({ auth, reseedDatabase }) => {
             <MessageForm />
           </>
         )}
-        <MessageList />
+        <CollectionList />
       </div>
     </Layout>
   );
