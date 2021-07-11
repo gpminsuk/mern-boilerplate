@@ -49,7 +49,7 @@ jobs:
         name: node-app
        
     - name: 'Extract tar files'
-      run: tar -xvf server.tar .
+      run: tar -xvf server.tar
 
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp-server
@@ -58,4 +58,4 @@ jobs:
         app-name: 'mm2b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
-        package: .       
+        package: ./client
