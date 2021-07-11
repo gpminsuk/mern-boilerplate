@@ -26,12 +26,15 @@ jobs:
         npm install
         npm build
       working-directory: client
-
+    
+    - name: 'Tar files'
+      run: tar -cvf client.tar client
+    
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
         name: node-app
-        path: client
+        path: client.tar
 
   deploy:
     runs-on: ubuntu-latest
