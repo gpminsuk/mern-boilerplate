@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm run start-prod --prefix server",
     "start-dev": "node --experimental-modules babel-node server/src/index.js",
-    "heroku-postbuild": "cd server && npm install && cd ../client && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && cd server && npm install && cd ../client && npm install && npm run build"
   },
   "author": "Nemanja Mitic (https://github.com/nemanjam)",
   "license": "MIT",
