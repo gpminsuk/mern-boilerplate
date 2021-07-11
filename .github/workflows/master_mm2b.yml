@@ -21,15 +21,11 @@ jobs:
       with:
         node-version: '14.x'
 
-    - name: server npm install, build, and test
+    - name: npm install, build, and test
       run: |
         npm install
-      working-directory: server
-      
-    - name: client npm install, build, and test
-      run: |
-        npm install
-        npm build
+        npm run build --if-present
+        npm run test --if-present
       working-directory: client
 
     - name: Upload artifact for deployment job
@@ -51,20 +47,11 @@ jobs:
       with:
         name: node-app
 
-    - name: 'Deploy to Azure Web App - Server'
+    - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp-server
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'mm2b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
-        package: .
-        
-    - name: 'Deploy to Azure Web App - Client'
-      id: deploy-to-webapp-client
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'mm3b'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
-        package: .
+        package: .       
