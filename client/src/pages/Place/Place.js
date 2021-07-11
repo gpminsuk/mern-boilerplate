@@ -13,14 +13,14 @@ import {
 } from "react-router-dom";
 
 import Layout from '../../layout/Layout';
+import CollectionList from '../../components/CollectionList/CollectionList';
 
 import './styles.css';
 
 const Place = () => {
-  console.log('asdfasdf')
   const { id } = useParams();
-  console.log(id)
   const [place, setPlace] = useState();
+  const [showCollections, setShowCollections] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,6 +30,17 @@ const Place = () => {
     fetch()
   }, []);
 
+  const handleClickAddToCollections = async (e) => {
+    setShowCollections(!showCollections);
+  }
+
+  const handleClickConfirmAddToCollections = async (e) => {
+    console.log(e.target)
+    const response = await axios.post(`/api/collections/add/${e.target.id}/${place.id}`, {});
+    console.log(response)
+    //setPlace(response.data.place)
+  }
+
   return (
     <Layout>
       <div className="place-page">
@@ -37,6 +48,9 @@ const Place = () => {
           <>
             <h1>Place page</h1>
             <h2>{place.name}</h2>
+            <button onClick={handleClickAddToCollections} type="button" className="btn">
+              Add to collections
+            </button>
             {place.collections.map(collection =>
               <>
                 <h3>{collection.name}</h3>
@@ -47,6 +61,16 @@ const Place = () => {
                 </Link>
               </>
             )}
+            {showCollections &&
+              <>
+                <CollectionList
+                  itemComponent={(collection) =>
+                    <button id={collection.id} key={collection.id} onClick={handleClickConfirmAddToCollections} type="button" className="btn">
+                      Add to this collection
+                    </button>
+                  } />
+              </>
+            }
           </>
         }
       </div>

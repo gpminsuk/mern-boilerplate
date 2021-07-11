@@ -7,6 +7,7 @@ import Layout from '../../layout/Layout';
 import CollectionList from '../../components/CollectionList/CollectionList';
 import MessageForm from '../../components/MessageForm/MessageForm';
 import { reseedDatabase } from '../../store/actions/authActions';
+import Collection from '../../components/Collection/Collection';
 
 import './styles.css';
 
@@ -55,7 +56,8 @@ const Home = ({ auth, reseedDatabase }) => {
             <MessageForm />
           </>
         )}
-        <CollectionList />
+        <CollectionList
+          itemComponent={collection => <Collection key={collection.id} collection={collection} />} />
       </div>
     </Layout>
   );

@@ -8,7 +8,6 @@ import {
   useRecoilValue,
 } from 'recoil';
 
-import Collection from '../Collection/Collection';
 import Loader from '../Loader/Loader';
 
 import './styles.css';
@@ -18,7 +17,7 @@ const collectionsState = atom({
   default: [],
 });
 
-const CollectionList = () => {
+const CollectionList = ({ itemComponent }) => {
   const [collections, setCollections] = useRecoilState(collectionsState);
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const CollectionList = () => {
     }
     fetch()
   }, []);
-
   const isLoading = false
   return (
     <div className="collection-list">
@@ -40,8 +38,8 @@ const CollectionList = () => {
           <Loader />
         ) : (
           <>
-            {collections.map((collection, index) => {
-              return <Collection key={index} collection={collection} />;
+            {collections.map((collection) => {
+              return itemComponent(collection)
             })}
           </>
         )}

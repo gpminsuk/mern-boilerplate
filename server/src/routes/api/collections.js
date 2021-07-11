@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { Router } from 'express';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import Place from '../../models/Place';
@@ -34,6 +35,56 @@ router.post('/', requireJwtAuth, async (req, res) => {
     await Place.updateMany({ _id: { $in: req.user.places } }, { $push: { collections: collection } });
 
     res.status(200).json({ collection });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+router.post('/delete/:collectionId/:placeId', async (req, res) => {
+  try {
+    const place = await Place.findById(req.params.placeId).populate('user').populate('places');
+    if (!place) return res.status(404).json({ message: 'No place found.' });
+    const collection = await Collection.findById(req.params.collectionId).populate('collections');
+    if (!collection) return res.status(404).json({ message: 'No collection found.' });
+
+    const placeIdx = collection.places.indexOf(mongoose.Types.ObjectId(place.id))
+    if (placeIdx >= 0) {
+      collection.places.splice(placeIdx, 1)
+    }
+    const collectionIdx = place.collections.indexOf(mongoose.Types.ObjectId(collection.id))
+    if (collectionIdx >= 0) {
+      place.collections.splice(collectionIdx, 1)
+    }
+    await place.save()
+    await collection.save()
+
+    res.status(200).json({ place, collection });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+router.post('/add/:collectionId/:placeId', async (req, res) => {
+  try {
+    const place = await Place.findById(req.params.placeId).populate('user').populate('places');
+    if (!place) return res.status(404).json({ message: 'No place found.' });
+    const collection = await Collection.findById(req.params.collectionId).populate('collections');
+    if (!collection) return res.status(404).json({ message: 'No collection found.' });
+
+    const places = new Set([place.id])
+    const collections = new Set([collection.id])
+    collection.places.forEach(item => {
+      places.add(item.toString())
+    })
+    place.collections.forEach(item => {
+      collections.add(item.toString())
+    })
+    collection.places = Array.from(places)
+    place.collections = Array.from(collections)
+    await place.save()
+    await collection.save()
+
+    res.status(200).json({ place, collection });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }

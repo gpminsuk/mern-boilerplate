@@ -30,6 +30,11 @@ const Collection = () => {
     fetch()
   }, []);
 
+  const handleClickRemoveFromCollection = async (e) => {
+    const response = await axios.post(`/api/collections/delete/${collection.id}/${e.target.id}`, {});
+    console.log(response)
+  }
+
   return (
     <Layout>
       <div className="collection-page">
@@ -45,6 +50,9 @@ const Collection = () => {
                     Select
                   </button>
                 </Link>
+                <button id={place.id} onClick={handleClickRemoveFromCollection} type="button" className="btn">
+                  Remove
+                </button>
               </>
             )}
           </>
