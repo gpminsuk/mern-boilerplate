@@ -51,11 +51,20 @@ jobs:
       with:
         name: node-app
 
-    - name: 'Deploy to Azure Web App'
-      id: deploy-to-webapp
+    - name: 'Deploy to Azure Web App - Server'
+      id: deploy-to-webapp-server
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'mm2b'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
+        package: .
+        
+    - name: 'Deploy to Azure Web App - Client'
+      id: deploy-to-webapp-client
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'mm3b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
         package: .
