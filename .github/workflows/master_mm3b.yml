@@ -50,7 +50,7 @@ jobs:
         name: node-app
        
     - name: 'Extract tar files'
-      run: tar -xvf client.tar client
+      run: tar -xvf client.tar .
       
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
