@@ -24,7 +24,7 @@ jobs:
     - name: npm install, build
       run: |
         npm install
-        npm run build --loglevel verbose
+        CI= npm run build
       working-directory: client
       
     - name: 'Tar files'
@@ -59,4 +59,4 @@ jobs:
         app-name: 'mm3b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f523c0431a3b4c4ba6d76148e9cb559a }}
-        package: ./client
+        package: ./client/build
