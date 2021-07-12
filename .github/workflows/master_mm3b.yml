@@ -24,7 +24,7 @@ jobs:
     - name: npm install, build
       run: |
         npm install
-        npm run build --loglevel verbose
+        npm run build
       working-directory: client
       
     - name: 'Tar files'
