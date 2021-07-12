@@ -25,10 +25,10 @@ jobs:
       run: |
         npm install
         npm build
-      working-directory: client/build
+      working-directory: client
     
     - name: 'Tar files'
-      run: tar -cvf client.tar client
+      run: tar -cvf client.tar client/build
     
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
