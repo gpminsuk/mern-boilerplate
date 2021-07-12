@@ -21,14 +21,20 @@ jobs:
       with:
         node-version: '14.x'
 
-    - name: npm install, build, and test
+    - name: npm install
       run: |
         npm install
-        npm build
       working-directory: client
+      
+
+    - name: npm build
+      run: |
+        cd client
+        pwd
+        npm run build
     
     - name: 'Tar files'
-      run: tar -cvf client.tar client
+      run: tar -cvf client.tar client/build
     
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
