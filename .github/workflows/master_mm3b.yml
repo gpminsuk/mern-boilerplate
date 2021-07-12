@@ -24,6 +24,7 @@ jobs:
     - name: npm install, build
       run: |
         npm install
+        set CI=false
         npm run build
       working-directory: client
       
