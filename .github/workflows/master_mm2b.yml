@@ -21,13 +21,12 @@ jobs:
       with:
         node-version: '14.x'
 
-    - name: npm install, build, and test
+    - name: npm run postbuild
       run: |
-        npm install
-      working-directory: server
+        npm run heroku-postbuild
 
     - name: 'Tar files'
-      run: tar -cvf server.tar server
+      run: tar -cvf server.tar .
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -58,4 +57,4 @@ jobs:
         app-name: 'mm2b'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_a903e67d5829422292c418a77206335f }}
-        package: ./server
+        package: .
