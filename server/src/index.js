@@ -59,8 +59,8 @@ if (isProduction) {
   const port = process.env.PORT || 5000;
 
   const httpsOptions = {
-    key: readFileSync(resolve(__dirname, '../security/cert.key')),
-    cert: readFileSync(resolve(__dirname, '../security/cert.pem')),
+    // key: readFileSync(resolve(__dirname, '../security/cert.key')),
+    // cert: readFileSync(resolve(__dirname, '../security/cert.pem')),
   };
 
   const server = https.createServer(httpsOptions, app).listen(port, () => {
