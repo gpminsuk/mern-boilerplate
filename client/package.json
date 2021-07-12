@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "set HTTPS=true && node ./node_modules/react-scripts/bin/react-scripts.js start",
-    "build": "node ./node_modules/react-scripts/bin/react-scripts.js build",
+    "build": "node ./node_modules/react-scripts/bin/react-scripts.js --max_old_space_size=4096 build",
     "test": "node ./node_modules/react-scripts/bin/react-scripts.js test",
     "eject": "node ./node_modules/react-scripts/bin/react-scripts.js eject"
   },
