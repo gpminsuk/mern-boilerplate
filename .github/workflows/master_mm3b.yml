@@ -29,8 +29,9 @@ jobs:
 
     - name: npm build
       run: |
+        cd client
+        cwd
         npm run build
-      working-directory: client
     
     - name: 'Tar files'
       run: tar -cvf client.tar client/build
