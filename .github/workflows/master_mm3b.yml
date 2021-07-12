@@ -25,7 +25,7 @@ jobs:
       run: |
         npm install
         npm build
-      working-directory: client
+      working-directory: client/build
     
     - name: 'Tar files'
       run: tar -cvf client.tar client
