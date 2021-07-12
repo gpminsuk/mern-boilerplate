@@ -21,9 +21,14 @@ jobs:
       with:
         node-version: '14.x'
 
-    - name: npm install, build, and test
+    - name: npm install
       run: |
         npm install
+      working-directory: client
+      
+
+    - name: npm build
+      run: |
         npm run build
       working-directory: client
     
