@@ -24,8 +24,7 @@ jobs:
     - name: npm install, build
       run: |
         npm install
-        set CI=false
-        npm run build
+        CI= npm run build
       working-directory: client
       
     - name: 'Tar files'
