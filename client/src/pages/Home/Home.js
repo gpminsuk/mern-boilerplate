@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -24,15 +25,43 @@ const ReseedMessage = ({ handleReseed }) => {
   );
 };
 
+let latestRequest = null
+
 const Home = ({ auth, reseedDatabase }) => {
   const handleReseed = () => {
     reseedDatabase();
   };
+  const [results, setResults] = useState([])
+
+  const onChange = async (e) => {
+    const query = e.target.value
+    latestRequest = query
+    if (query) {
+      const response = await axios.post('https://i-o-optimized-deployment-8a14a8.ent.westus2.azure.elastic-cloud.com/api/as/v1/engines/mm2b-search-engine/search.json', JSON.stringify({
+        query
+      }), {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer search-2e45zmttpfnywx5j7tdkckck',
+        }
+      });
+      if (latestRequest === query) {
+        setResults(response.data.results)
+      }
+    }
+    else {
+      setResults([])
+    }
+  }
 
   return (
     <Layout>
       <div className="home-page">
         <h1>Home page</h1>
+        Search: <input type="text" name="name" onChange={onChange} />
+        {results.map((item) => <>
+          <div>{item.name.raw}: {item.address.raw}</div>
+        </>)}
         {!auth.isAuthenticated ? (
           <div>
             <p>
