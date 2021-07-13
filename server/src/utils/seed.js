@@ -39,11 +39,11 @@ export const seedDb = async () => {
       await user.save();
 
       const place = new Place({
-        name: 'My favorite place 1',
+        name: `${user.username}'s favorite place`,
       })
 
       const collection = new Collection({
-        name: 'My collection 1',
+        name: `${user.username}'s collection`,
         user: user._id,
         places: [place._id],
       })

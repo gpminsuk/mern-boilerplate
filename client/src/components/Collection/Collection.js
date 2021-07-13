@@ -6,7 +6,7 @@ import './styles.css';
 const Collection = ({ collection }) => {
   return (
     <div className={'message'}>
-      {collection.name}, {collection.places.map(place => place.name)}
+      {collection.name}{'---->'}{collection.places.map(place => place.name)}
 
       <Link to={`/collection/${collection.id}`}>
         <button type="button" className="btn">
