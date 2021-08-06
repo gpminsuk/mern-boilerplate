@@ -72,6 +72,7 @@ router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, n
 });
 
 router.get('/reseed', async (req, res) => {
+  console.log('reseed');
   await seedDb();
   res.json({ message: 'Database reseeded successfully.' });
 });

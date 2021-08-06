@@ -18,19 +18,14 @@ export const seedDb = async () => {
   const usersPromises = [...Array(3).keys()].map((index, i) => {
     const user = new User({
       provider: 'email',
-      username: `user${index}`,
       email: `email${index}@email.com`,
-      password: '123456789',
       name: faker.name.findName(),
-      // avatar: faker.image.avatar(),
       avatar: `avatar${index}.jpg`,
-      bio: faker.lorem.sentences(3),
     });
 
     if (index === 0) {
       user.role = 'ADMIN';
     }
-    user.registerUser(user, () => { });
     return user;
   });
 
@@ -40,15 +35,15 @@ export const seedDb = async () => {
 
       const place = new Place({
         name: `${user.username}'s favorite place`,
-      })
+      });
 
       const collection = new Collection({
         name: `${user.username}'s collection`,
         user: user._id,
         places: [place._id],
-      })
+      });
 
-      place.collections.push(collection)
+      place.collections.push(collection);
 
       await place.save();
       await collection.save();

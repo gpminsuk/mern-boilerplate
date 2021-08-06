@@ -6,9 +6,16 @@ const router = Router();
 
 router.get('/:id', async (req, res) => {
   try {
-    const place = await Place.findById(req.params.id).populate('collections');
+    const place = await Place.findById(req.params.id)
+      .populate('collections')
+      .populate({
+        path: 'collections',
+        populate: {
+          path: 'user',
+        },
+      });
     if (!place) return res.status(404).json({ message: 'No place found.' });
-    res.json({ place });
+    res.json({ ...place.toJSON() });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }
@@ -18,8 +25,10 @@ router.post('/', requireJwtAuth, async (req, res) => {
   try {
     const place = await Place.create({
       name: req.body.name,
+      photo: req.body.photo,
+      address: req.body.address,
     });
-    res.status(200).json({ place });
+    res.status(200).json({ ...place.toJSON() });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }
@@ -27,7 +36,14 @@ router.post('/', requireJwtAuth, async (req, res) => {
 
 router.delete('/:id', requireJwtAuth, async (req, res) => {
   try {
-    const place = await Place.findByIdAndRemove(req.params.id).populate('collections');
+    const place = await Place.findByIdAndRemove(req.params.id)
+      .populate('collections')
+      .populate({
+        path: 'collections',
+        populate: {
+          path: 'user',
+        },
+      });
     if (!place) return res.status(404).json({ message: 'No place found.' });
 
     for (const collection of place.collections) {
@@ -35,7 +51,7 @@ router.delete('/:id', requireJwtAuth, async (req, res) => {
       await collection.save();
     }
 
-    res.status(200).json({ place });
+    res.status(200).json({ ...place.toJSON() });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }
@@ -51,7 +67,7 @@ router.put('/:id', requireJwtAuth, async (req, res) => {
       { new: true },
     );
 
-    res.status(200).json({ place });
+    res.status(200).json({ ...place.toJSON() });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }

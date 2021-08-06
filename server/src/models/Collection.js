@@ -8,8 +8,12 @@ const collectionSchema = new Schema(
       type: String,
       required: true,
     },
+    photo: {
+      type: String,
+    },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     places: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Place' }],
+    isDefault: { type: Boolean },
   },
   { timestamps: true },
 );
@@ -18,6 +22,8 @@ collectionSchema.methods.toJSON = function () {
   return {
     id: this._id,
     name: this.name,
+    photo: this.photo,
+    isDefault: this.isDefault,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     user: this.user,

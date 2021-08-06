@@ -8,6 +8,12 @@ const placeSchema = new Schema(
       type: String,
       required: true,
     },
+    photo: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
     collections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Collection', required: true }],
   },
   { timestamps: true },
@@ -17,6 +23,8 @@ placeSchema.methods.toJSON = function () {
   return {
     id: this._id,
     name: this.name,
+    photo: this.photo,
+    address: this.address,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     collections: this.collections,
