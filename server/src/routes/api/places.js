@@ -4,6 +4,24 @@ import Place from '../../models/Place';
 
 const router = Router();
 
+router.get('/', async (req, res) => {
+  try {
+    const places = await Place.find()
+      .sort({ createdAt: 'desc' })
+      .populate('collections')
+      .populate({
+        path: 'collections',
+        populate: {
+          path: 'user',
+        },
+      })
+      .limit(20);
+    res.json({ ...places.toJSON() });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const place = await Place.findById(req.params.id)

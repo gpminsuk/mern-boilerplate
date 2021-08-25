@@ -26,6 +26,7 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/register": "^7.0.0",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "concurrently": "^5.1.0",
     "config": "^3.3.0",
     "connect-flash": "^0.1.1",
@@ -45,7 +46,8 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-http-bearer": "^1.0.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "proj4": "^2.7.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

@@ -1,9 +1,10 @@
 import faker from 'faker';
 import { join } from 'path';
-
+import fs from 'fs';
 import User from '../models/User';
 import Place from '../models/Place';
 import Collection from '../models/Collection';
+import Promise from 'bluebird';
 import { deleteAllAvatars } from './utils';
 
 export const seedDb = async () => {
@@ -14,39 +15,46 @@ export const seedDb = async () => {
   await Collection.deleteMany({});
   await deleteAllAvatars(join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH));
 
-  // create 3 users
-  const usersPromises = [...Array(3).keys()].map((index, i) => {
-    const user = new User({
-      provider: 'email',
-      email: `email${index}@email.com`,
-      name: faker.name.findName(),
-      avatar: `avatar${index}.jpg`,
-    });
-
-    if (index === 0) {
-      user.role = 'ADMIN';
+  const lines = fs
+    .readFileSync('./data/data.tsv')
+    .toString()
+    .split('\r\n')
+    .slice(1)
+    .map((line) => line.split('\t'));
+  const users = {};
+  const collections = {};
+  const places = {};
+  await Promise.mapSeries(lines, async (cols) => {
+    const userName = cols[2];
+    if (!users[userName]) {
+      users[userName] = await new User({
+        provider: 'email',
+        email: `${userName}@email.com`,
+        name: userName,
+        avatar: `${userName}.jpg`,
+      }).save();
+      console.log(users[userName]);
     }
-    return user;
+    const userId = users[userName]._id;
+
+    const placeIndex = cols[3];
+    const placeName = cols[4].split(' ').slice(0, -1).join(' ') || cols[4];
+    if (!places[placeIndex]) {
+      places[placeIndex] = await new Place({
+        name: placeName,
+      }).save();
+    }
+    const placeId = places[placeIndex]._id;
+
+    const collectionIndex = cols[0];
+    const collectionName = cols[1];
+    if (!collections[collectionIndex]) {
+      collections[collectionIndex] = await new Collection({
+        name: collectionName,
+        user: userId,
+        places: [],
+      }).save();
+    }
+    collections[collectionIndex].places.push(placeId);
   });
-
-  await Promise.all(
-    usersPromises.map(async (user) => {
-      await user.save();
-
-      const place = new Place({
-        name: `${user.username}'s favorite place`,
-      });
-
-      const collection = new Collection({
-        name: `${user.username}'s collection`,
-        user: user._id,
-        places: [place._id],
-      });
-
-      place.collections.push(collection);
-
-      await place.save();
-      await collection.save();
-    }),
-  );
 };
