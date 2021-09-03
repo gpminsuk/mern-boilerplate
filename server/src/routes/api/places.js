@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
         },
       })
       .limit(20);
-    res.json({ ...places.toJSON() });
+    res.json(places.map((place) => place.toJSON()));
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }

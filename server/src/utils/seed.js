@@ -44,7 +44,6 @@ export const seedDb = async () => {
         name: placeName,
       }).save();
     }
-    const placeId = places[placeIndex]._id;
 
     const collectionIndex = cols[0];
     const collectionName = cols[1];
@@ -55,6 +54,14 @@ export const seedDb = async () => {
         places: [],
       }).save();
     }
+
+    const placeId = places[placeIndex]._id;
     collections[collectionIndex].places.push(placeId);
+    await collections[collectionIndex].save();
+
+    const collectionId = collections[collectionIndex]._id;
+    places[placeIndex].collections.push(collectionId);
+    await places[placeIndex].save();
   });
+  console.log('Reseed done');
 };

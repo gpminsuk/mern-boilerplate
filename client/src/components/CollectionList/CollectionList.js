@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
+import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 
 import Loader from '../Loader/Loader';
 
@@ -23,12 +17,12 @@ const CollectionList = ({ itemComponent }) => {
   useEffect(() => {
     const fetch = async () => {
       const response = await axios.get('/api/collections', {});
-      console.log('response', response)
-      setCollections(response.data.collections)
-    }
-    fetch()
+      console.log('response', response);
+      setCollections(response.data.collections);
+    };
+    fetch();
   }, []);
-  const isLoading = false
+  const isLoading = false;
   return (
     <div className="collection-list">
       <h2>Collections:</h2>
@@ -38,8 +32,8 @@ const CollectionList = ({ itemComponent }) => {
           <Loader />
         ) : (
           <>
-            {collections.map((collection) => {
-              return itemComponent(collection)
+            {collections?.map((collection) => {
+              return itemComponent(collection);
             })}
           </>
         )}
@@ -48,4 +42,4 @@ const CollectionList = ({ itemComponent }) => {
   );
 };
 
-export default CollectionList
+export default CollectionList;

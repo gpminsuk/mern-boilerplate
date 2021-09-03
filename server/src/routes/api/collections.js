@@ -8,12 +8,12 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try {
-    const collection = await Collection.find()
+    const collections = await Collection.find()
       .sort({ createdAt: 'desc' })
       .populate('user')
       .populate('places')
       .limit(20);
-    res.json({ ...collection.toJSON() });
+    res.json(collections.map((collection) => collection.toJSON()));
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }
