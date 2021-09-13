@@ -88,7 +88,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 require('./services/jwtStrategy');
-//require('./services/bearerStrategy');
+require('./services/bearerStrategy');
 //require('./services/facebookStrategy');
 //require('./services/googleStrategy');
 require('./services/localStrategy');
