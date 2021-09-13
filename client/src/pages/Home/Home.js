@@ -61,7 +61,13 @@ const Home = ({ auth, reseedDatabase }) => {
     <Layout>
       <div className="home-page">
         <h1>Home page</h1>
-        <iframe src="https://mm2b.azurewebsites.net/three"></iframe>
+        <iframe
+          type="text/html"
+          width="640"
+          height="360"
+          src="https://mm2b.azurewebsites.net/three"
+          frameborder="0"
+        ></iframe>
         Search: <input type="text" name="name" onChange={onChange} />
         {results.map((item) => (
           <>
