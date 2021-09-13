@@ -25,43 +25,51 @@ const ReseedMessage = ({ handleReseed }) => {
   );
 };
 
-let latestRequest = null
+let latestRequest = null;
 
 const Home = ({ auth, reseedDatabase }) => {
   const handleReseed = () => {
     reseedDatabase();
   };
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState([]);
 
   const onChange = async (e) => {
-    const query = e.target.value
-    latestRequest = query
+    const query = e.target.value;
+    latestRequest = query;
     if (query) {
-      const response = await axios.post('https://i-o-optimized-deployment-8a14a8.ent.westus2.azure.elastic-cloud.com/api/as/v1/engines/mm2b-search-engine/search.json', JSON.stringify({
-        query
-      }), {
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer search-2e45zmttpfnywx5j7tdkckck',
-        }
-      });
+      const response = await axios.post(
+        'https://i-o-optimized-deployment-8a14a8.ent.westus2.azure.elastic-cloud.com/api/as/v1/engines/mm2b-search-engine/search.json',
+        JSON.stringify({
+          query,
+        }),
+        {
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+            Authorization: 'Bearer search-2e45zmttpfnywx5j7tdkckck',
+          },
+        },
+      );
       if (latestRequest === query) {
-        setResults(response.data.results)
+        setResults(response.data.results);
       }
+    } else {
+      setResults([]);
     }
-    else {
-      setResults([])
-    }
-  }
+  };
 
   return (
     <Layout>
       <div className="home-page">
         <h1>Home page</h1>
+        <iframe src="https://mm2b.azurewebsites.net/three"></iframe>
         Search: <input type="text" name="name" onChange={onChange} />
-        {results.map((item) => <>
-          <div>{item.name.raw}: {item.address.raw}</div>
-        </>)}
+        {results.map((item) => (
+          <>
+            <div>
+              {item.name.raw}: {item.address.raw}
+            </div>
+          </>
+        ))}
         {!auth.isAuthenticated ? (
           <div>
             <p>
@@ -86,7 +94,8 @@ const Home = ({ auth, reseedDatabase }) => {
           </>
         )}
         <CollectionList
-          itemComponent={collection => <Collection key={collection.id} collection={collection} />} />
+          itemComponent={(collection) => <Collection key={collection.id} collection={collection} />}
+        />
       </div>
     </Layout>
   );

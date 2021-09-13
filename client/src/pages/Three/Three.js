@@ -29,17 +29,16 @@ function Box(props) {
   );
 }
 
-ReactDOM.render(
-  <Canvas>
-    <ambientLight />
-    <pointLight position={[10, 10, 10]} />
-    <Box position={[-1.2, 0, 0]} />
-    <Box position={[1.2, 0, 0]} />
-  </Canvas>,
-  document.getElementById('root'),
-);
-
 export default () => {
+  ReactDOM.render(
+    <Canvas>
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
+      <Box position={[-1.2, 0, 0]} />
+      <Box position={[1.2, 0, 0]} />
+    </Canvas>,
+    document.getElementById('root'),
+  );
   return (
     <Layout>
       <div className="home-page"></div>
