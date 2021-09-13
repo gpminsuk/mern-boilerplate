@@ -60,48 +60,57 @@ const Home = ({ auth, reseedDatabase }) => {
   return (
     <Layout>
       <div className="home-page">
-        <h1>Home page</h1>
-        <iframe
-          type="text/html"
-          width="640"
-          height="360"
-          src="https://mm2b.azurewebsites.net/three"
-          frameborder="0"
-        ></iframe>
-        Search: <input type="text" name="name" onChange={onChange} />
-        {results.map((item) => (
-          <>
-            <div>
-              {item.name.raw}: {item.address.raw}
-            </div>
-          </>
-        ))}
-        {!auth.isAuthenticated ? (
-          <div>
-            <p>
-              Welcome guest!{' '}
-              <Link className="bold" to="/login">
-                Log in
-              </Link>{' '}
-              or{' '}
-              <Link className="bold" to="/register">
-                Register
-              </Link>
-            </p>
-            <ReseedMessage handleReseed={handleReseed} />
+        <h1>Products</h1>
+        <div style={{ width: '1000px' }}>
+          <div style={{ display: 'flex' }}>
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
           </div>
-        ) : (
-          <>
-            <p>
-              Welcome <span className="name">{auth.me.name}</span>!
-            </p>
-            <ReseedMessage handleReseed={handleReseed} />
-            <MessageForm />
-          </>
-        )}
-        <CollectionList
-          itemComponent={(collection) => <Collection key={collection.id} collection={collection} />}
-        />
+          <div style={{ display: 'flex' }}>
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
+            <iframe
+              type="text/html"
+              width="640"
+              height="360"
+              src="https://mm2b.azurewebsites.net/three"
+              frameborder="0"
+            />
+          </div>
+        </div>
       </div>
     </Layout>
   );

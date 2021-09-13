@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { compose } from 'redux';
@@ -43,25 +43,27 @@ const App = ({ logInUserWithOauth, auth, loadMe }) => {
   }, [auth.isAuthenticated, auth.token, loadMe, auth.isLoading, auth.appLoaded]);
 
   return (
-    <RecoilRoot>
-      {auth.appLoaded ? (
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/users" component={Users} />
-          <Route path="/notfound" component={NotFound} />
-          <Route path="/admin" component={Admin} />
-          <Route exact path="/three" component={Three} />
-          <Route exact path="/:username" component={Profile} />
-          <Route path="/place/:id" component={Place} />
-          <Route path="/collection/:id" component={Collection} />
-          <Route exact path="/" component={Home} />
-          <Route component={NotFound} />
-        </Switch>
-      ) : (
-        <Loader />
-      )}
-    </RecoilRoot>
+    <Suspense fallback={<>Loading</>}>
+      <RecoilRoot>
+        {auth.appLoaded ? (
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/users" component={Users} />
+            <Route path="/notfound" component={NotFound} />
+            <Route path="/admin" component={Admin} />
+            <Route exact path="/three" component={Three} />
+            <Route exact path="/:username" component={Profile} />
+            <Route path="/place/:id" component={Place} />
+            <Route path="/collection/:id" component={Collection} />
+            <Route exact path="/" component={Home} />
+            <Route component={NotFound} />
+          </Switch>
+        ) : (
+          <Loader />
+        )}
+      </RecoilRoot>
+    </Suspense>
   );
 };
 
