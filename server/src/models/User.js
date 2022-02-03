@@ -10,10 +10,6 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    provider: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       lowercase: true,
@@ -23,11 +19,6 @@ const userSchema = new Schema(
       index: true,
     },
     name: String,
-    avatar: String,
-    defaultCollectionId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Collection',
-    },
     role: { type: String, default: 'USER' },
     facebookId: {
       type: String,
@@ -37,12 +28,13 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    provider: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true },
 );
-
-console.log(__dirname, process.env.IMAGES_FOLDER_PATH);
-console.log(join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH));
 
 userSchema.methods.toJSON = function () {
   return {
