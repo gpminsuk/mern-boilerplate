@@ -11,17 +11,7 @@ const { Schema } = mongoose;
 const postSchema = new Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        required: true
-      },
-      coordinates: {
-        type: [Number],
-        required: true
-      }
-    }
+    location: [Number],
     like: { type: Number, required: true },
     text: String,
     replyIds: { type: mongoose.Schema.Types.ObjectId, ref: 'Reply' },
