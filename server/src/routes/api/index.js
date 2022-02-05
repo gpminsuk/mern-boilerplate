@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import usersRoutes from './users';
-import collectionsRoutes from './collections';
-import placesRoutes from './places';
-import googleRoutes from './google';
+import postsRoutes from './posts';
+import notificationsRoutes from './notifications';
+import repliesRoutes from './replies';
 const router = Router();
 
-router.use('/users', usersRoutes);
-router.use('/places', placesRoutes);
-router.use('/collections', collectionsRoutes);
-router.use('/google', googleRoutes);
+router.use('/posts', postsRoutes);
+router.use('/notifications', notificationsRoutes);
+router.use('/replies', repliesRoutes);
 
 export default router;
