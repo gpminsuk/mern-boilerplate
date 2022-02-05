@@ -7,12 +7,9 @@
     "node": "12.16.1"
   },
   "scripts": {
-    "start-prod": "npm run build && node ./build/index.js",
-    "build": "npm run clean && npm run build-babel",
-    "clean": "rm -rf build && mkdir build",
-    "build-babel": "node ./node_modules/@babel/cli/bin/babel.js -d ./build ./src -s",
-    "start-dev": "node --exec babel-node src/index.js",
-    "server": "nodemon --exec babel-node src/index.js",
+    "build": "npx tsc --build",
+    "clean": "rd /s /q dist && npx tsc --build --clean",
+    "server": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
@@ -27,7 +24,7 @@
     "@babel/register": "^7.0.0",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
-    "concurrently": "^5.1.0",
+    "concurrently": "^7.0.0",
     "config": "^3.3.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^6.1.0",
@@ -35,21 +32,26 @@
     "express-list-endpoints": "^4.0.1",
     "faker": "^4.1.0",
     "fb": "^2.0.0",
-    "joi": "^14.3.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.9.5",
     "multer": "^1.4.2",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-http-bearer": "^1.0.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pino": "^7.6.5",
     "proj4": "^2.7.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "eslint": "^8.8.0",
+    "nodemon": "^2.0.2",
+    "tsconfig-paths": "^3.12.0",
+    "typescript": "^4.5.5"
   }
 }
