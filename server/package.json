@@ -47,7 +47,8 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pino": "^7.6.5",
-    "proj4": "^2.7.5"
+    "proj4": "^2.7.5",
+    "twilio": "^3.73.1"
   },
   "devDependencies": {
     "eslint": "^8.8.0",

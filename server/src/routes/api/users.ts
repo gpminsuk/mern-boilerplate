@@ -12,6 +12,7 @@ import User from 'src/models/User';
 import OTP from 'src/models/OTP';
 import { logger, catchAsync } from 'src/utils';
 import jsonwebtoken from 'jsonwebtoken';
+import { sendVerificationSMS } from 'src/services/twilio';
 
 const router = Router();
 
@@ -34,12 +35,13 @@ router.put(
 router.get(
   '/verify',
   catchAsync(async (req: Request, res: Response) => {
-    const code = '1234';
+    const code = ('000000' + Math.random() * 1000000).substr(-6);
     await OTP.create({
       phone: req.query.phone,
       code,
       expireAt: moment().add(5, 'minutes'),
     });
+    sendVerificationSMS('+' + req.query.phone, code);
     res.status(200).json({});
   }),
 );
