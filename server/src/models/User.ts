@@ -5,6 +5,7 @@ interface User {
   phone: String;
   name: String;
   location: Number[];
+  locationDescription: String;
   role: String;
   authToken: String;
   refreshToken: String;
@@ -20,6 +21,7 @@ const schema = new Schema<User>(
     phone: { type: String, unique: true },
     name: String,
     location: [Number],
+    locationDescription: String,
     role: { type: String, default: 'USER' },
     authToken: { type: String, required: true },
     refreshToken: { type: String, required: true },
@@ -38,6 +40,7 @@ schema.methods.toJSON = function () {
     phone: this.phone,
     name: this.name,
     location: this.location,
+    locationDescription: this.locationDescription,
     role: this.role,
     authToken: this.authToken,
     refreshToken: this.refreshToken,

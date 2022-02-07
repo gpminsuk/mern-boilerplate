@@ -13,6 +13,7 @@ import OTP from 'src/models/OTP';
 import { logger, catchAsync } from 'src/utils';
 import jsonwebtoken from 'jsonwebtoken';
 import { sendVerificationSMS } from 'src/services/twilio';
+import fetch from 'node-fetch';
 
 const router = Router();
 
@@ -119,11 +120,27 @@ router.put(
   '/loc',
   authenticateAuthToken,
   catchAsync(async (req: Request, res: Response) => {
+    req.query.lng = 127.0339599;
+    req.query.lat = 37.5252818;
+    const geoResponse = await fetch(
+      `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${req.query.lng}&y=${req.query.lat}`,
+      {
+        headers: {
+          Authorization: `KakaoAK ${process.env.KAKAO_API_KEY}`,
+        },
+      },
+    );
+    const geoJson = await geoResponse.json();
+    let locationDescription = '해외';
+    if (geoJson.documents && geoJson.documents[0]) {
+      locationDescription = `${geoJson.documents[0].region_1depth_name} ${geoJson.documents[0].region_2depth_name} ${geoJson.documents[0].region_3depth_name}`;
+    }
     const user = await User.findOneAndUpdate(
       { phone: req.user.phone },
       {
         $set: {
           location: [req.query.lng, req.query.lat],
+          locationDescription,
         },
       },
       { new: true },
