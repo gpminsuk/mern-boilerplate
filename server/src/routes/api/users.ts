@@ -1,9 +1,17 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { Router, Request, Response } from 'express';
-import requireJwtAuth from '../../middleware/requireJwtAuth';
+import {
+  authenticateAuthToken,
+  authenticateRefreshToken,
+  SECRET_AUTH_TOKEN,
+  AUTH_TOKEN_EXPIRY,
+  SECRET_REFRESH_TOKEN,
+} from 'src/middleware/crypto';
 import User from 'src/models/User';
+import OTP from 'src/models/OTP';
 import { logger, catchAsync } from 'src/utils';
+import jsonwebtoken from 'jsonwebtoken';
 
 const router = Router();
 
@@ -13,10 +21,10 @@ router.put(
     const user = await User.findOneAndUpdate(
       { phone: req.body.phone },
       { $set: _.pick(req.body, ['name']) },
-      { upsert: true },
+      { upsert: true, new: true },
     );
     if (user.verified) {
-      res.status(200).json({ user: user.toJSON() });
+      res.status(200).json(user.toJSON());
     } else {
       res.status(403).json({});
     }
@@ -26,40 +34,99 @@ router.put(
 router.get(
   '/verify',
   catchAsync(async (req: Request, res: Response) => {
-    const verificationCode = '1234';
-    const user = await User.findOneAndUpdate(
-      { phone: req.body.phone },
-      { $set: { verificationCode, verificationExpireAt: moment().add(5, 'minutes') } },
-    );
-    if (user.verified) {
-      res.status(200).json({ user: user.toJSON() });
-    } else {
-      res.status(200).json({ verificationCode });
-    }
+    const code = '1234';
+    await OTP.create({
+      phone: req.query.phone,
+      code,
+      expireAt: moment().add(5, 'minutes'),
+    });
+    res.status(200).json({});
   }),
 );
 
 router.put(
   '/verify',
   catchAsync(async (req: Request, res: Response) => {
-    const user = await User.findOneAndUpdate(
-      { phone: req.body.phone, verificationCode: req.body.verificationCode, verificationExpireAt: { $gt: new Date() } },
-      { $set: { verified: true } },
-    );
-    if (user) {
-      res.status(200).json({ user: user.toJSON() });
+    const otp = await OTP.findOne({ phone: req.body.phone, code: req.body.code, expireAt: { $gt: new Date() } });
+    if (otp) {
+      const user = await User.findOneAndUpdate(
+        { phone: req.body.phone },
+        {
+          $set: {
+            authToken: jsonwebtoken.sign({ phone: req.body.phone }, SECRET_AUTH_TOKEN, {
+              expiresIn: AUTH_TOKEN_EXPIRY,
+            }),
+            refreshToken: jsonwebtoken.sign({ phone: req.body.phone }, SECRET_REFRESH_TOKEN),
+          },
+        },
+        { upsert: true, new: true },
+      );
+      res.status(200).json(user.toJSON());
     } else {
-      res.status(403).json({});
+      res.status(403).json(null);
     }
   }),
 );
 
 router.get(
   '/me',
-  requireJwtAuth,
+  authenticateAuthToken,
   catchAsync(async (req: Request, res: Response) => {
-    const me = req.user.toJSON();
-    res.json({ me });
+    const user = await User.findOne({ phone: req.user.phone });
+    res.json(user.toJSON());
+  }),
+);
+
+router.get(
+  '/refresh',
+  authenticateRefreshToken,
+  catchAsync(async (req: Request, res: Response) => {
+    const user = await User.findOneAndUpdate(
+      { phone: req.user.phone },
+      {
+        $set: {
+          authToken: jsonwebtoken.sign({ phone: req.user.phone }, SECRET_AUTH_TOKEN, {
+            expiresIn: AUTH_TOKEN_EXPIRY,
+          }),
+        },
+      },
+      { new: true },
+    );
+    res.json(user.toJSON());
+  }),
+);
+
+router.put(
+  '/complete_tutorial',
+  authenticateAuthToken,
+  catchAsync(async (req: Request, res: Response) => {
+    const user = await User.findOneAndUpdate(
+      { phone: req.user.phone },
+      {
+        $set: {
+          tutorialCompleted: true,
+        },
+      },
+      { new: true },
+    );
+    res.json(user.toJSON());
+  }),
+);
+
+router.put(
+  '/loc',
+  authenticateAuthToken,
+  catchAsync(async (req: Request, res: Response) => {
+    const user = await User.findOneAndUpdate(
+      { phone: req.user.phone },
+      {
+        $set: {
+          location: [req.query.lng, req.query.lat],
+        },
+      },
+      { new: true },
+    );
+    res.json(user.toJSON());
   }),
 );
 

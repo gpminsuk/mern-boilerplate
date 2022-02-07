@@ -3,7 +3,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import http from 'http';
 import { resolve, join } from 'path';
-import passport from 'passport';
 import all_routes from 'express-list-endpoints';
 import { logger } from 'src/utils';
 import routes from './routes';
@@ -13,9 +12,6 @@ const app = express();
 // Bodyparser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(passport.initialize());
-require('./services/bearerStrategy');
 
 const isProduction = process.env.NODE_ENV === 'production';
 

@@ -6,6 +6,7 @@ interface Post {
   like: Number;
   text: String;
   replyIds: Types.ObjectId[];
+  createdAt: Date;
 }
 
 const schema = new Schema<Post>(
@@ -26,6 +27,7 @@ schema.methods.toJSON = function () {
     like: this.like,
     text: this.text,
     replyIds: this.replyIds,
+    createdAt: this.createdAt,
   };
 };
 

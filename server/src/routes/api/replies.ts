@@ -2,17 +2,17 @@ import _ from 'lodash';
 import { Router, Request, Response } from 'express';
 import Reply from 'src/models/Reply';
 import { logger, catchAsync } from 'src/utils';
-import requireJwtAuth from 'src/middleware/requireJwtAuth';
+import { authenticateAuthToken } from 'src/middleware/crypto';
 
 const router = Router();
 
 router.post(
   '/:postId',
-  requireJwtAuth,
+  authenticateAuthToken,
   catchAsync(async (req: Request, res: Response) => {
     logger.log('New reply', req.body);
     const reply = await Reply.create({
-      userId: req.user._id,
+      userId: req.user.id,
       postId: req.params.postId,
       text: req.body.text,
     });

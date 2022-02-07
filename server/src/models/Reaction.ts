@@ -1,10 +1,14 @@
 import { Schema, Types, model } from 'mongoose';
 
-enum ReactionType {
-  LIKE_POST = 'LIKE_POST',
-  UNLIKE_POST = 'UNLIKE_POST',
-  LIKE_REPLY = 'LIKE_REPLY',
-  UNLIKE_REPLY = 'UNLIKE_REPLY',
+export enum ReactionType {
+  NONE = 'NONE',
+  LIKE = 'LIKE',
+  UNLIKE = 'UNLIKE',
+}
+
+export enum ReactionTarget {
+  POST = 'POST',
+  REPLY = 'REPLY',
 }
 
 interface Reaction {
@@ -12,6 +16,8 @@ interface Reaction {
   postId: Types.ObjectId;
   replyId: Types.ObjectId;
   type: ReactionType;
+  target: ReactionTarget;
+  active: Boolean;
 }
 
 const schema = new Schema<Reaction>(
