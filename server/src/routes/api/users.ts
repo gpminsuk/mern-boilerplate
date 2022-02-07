@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import bluebird from 'bluebird';
 import moment from 'moment';
 import { Router, Request, Response } from 'express';
 import {
@@ -26,7 +27,7 @@ router.put(
       { upsert: true, new: true },
     );
     if (user.verified) {
-      res.status(200).json(user.toJSON());
+      res.status(200).json(await user.toJSON());
     } else {
       res.status(403).json({});
     }
@@ -64,7 +65,7 @@ router.put(
         },
         { upsert: true, new: true },
       );
-      res.status(200).json(user.toJSON());
+      res.status(200).json(await user.toJSON());
     } else {
       res.status(403).json(null);
     }
@@ -76,7 +77,7 @@ router.get(
   authenticateAuthToken,
   catchAsync(async (req: Request, res: Response) => {
     const user = await User.findOne({ phone: req.user.phone });
-    res.json(user.toJSON());
+    res.json(await user.toJSON());
   }),
 );
 
@@ -95,7 +96,7 @@ router.get(
       },
       { new: true },
     );
-    res.json(user.toJSON());
+    res.json(await user.toJSON());
   }),
 );
 
@@ -112,7 +113,7 @@ router.put(
       },
       { new: true },
     );
-    res.json(user.toJSON());
+    res.json(await user.toJSON());
   }),
 );
 
@@ -145,7 +146,7 @@ router.put(
       },
       { new: true },
     );
-    res.json(user.toJSON());
+    res.json(await user.toJSON());
   }),
 );
 

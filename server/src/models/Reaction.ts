@@ -11,36 +11,33 @@ export enum ReactionTarget {
   REPLY = 'REPLY',
 }
 
-interface Reaction {
+export interface Reaction {
   userId: Types.ObjectId;
-  postId: Types.ObjectId;
-  replyId: Types.ObjectId;
   type: ReactionType;
   target: ReactionTarget;
-  active: Boolean;
+  targetId: Types.ObjectId;
 }
 
-const schema = new Schema<Reaction>(
+export const schema = new Schema<Reaction>(
   {
     userId: { type: Types.ObjectId, ref: 'User', required: true },
-    postId: { type: Types.ObjectId, ref: 'Post' },
-    replyId: { type: Types.ObjectId, ref: 'Reply' },
     type: { type: ReactionType },
+    target: { type: ReactionTarget },
+    targetId: { type: Types.ObjectId },
   },
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
     userId: this.userId,
-    postId: this.postId,
-    replyId: this.replyId,
     type: this.type,
+    target: this.target,
+    targetId: this.targetId,
   };
 };
 
-schema.index({ userId: 1, postId: 1 });
-schema.index({ userId: 1, replyId: 1 });
+schema.index({ userId: 1, target: 1, targetId: 1 });
 
 export default model<Reaction>('Reaction', schema);

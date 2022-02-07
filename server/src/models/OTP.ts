@@ -15,7 +15,7 @@ const schema = new Schema<OTP>(
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
     phone: this.phone,

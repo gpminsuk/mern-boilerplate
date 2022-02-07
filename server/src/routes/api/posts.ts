@@ -1,6 +1,8 @@
 import _ from 'lodash';
+import bluebird from 'bluebird';
 import { Router, Request, Response } from 'express';
 import Post from '../../models/Post';
+import Reply from '../../models/Reply';
 import { logger, catchAsync } from 'src/utils';
 import { authenticateAuthToken } from 'src/middleware/crypto';
 
@@ -16,7 +18,7 @@ router.post(
       location: [req.body.lng, req.body.lat],
       text: req.body.text,
     });
-    res.json(post.toJSON());
+    res.json(await post.toJSON());
   }),
 );
 
@@ -34,7 +36,7 @@ router.get(
     })
       .sort({ like: 'desc', createdAt: 'desc' })
       .limit(20);
-    res.json(posts.map((post) => post.toJSON()));
+    res.json(await bluebird.map(posts, async (post) => post.toJSON()));
   }),
 );
 
@@ -52,7 +54,7 @@ router.get(
     })
       .sort({ createdAt: 'desc' })
       .limit(20);
-    res.json(posts.map((post) => post.toJSON()));
+    res.json(await bluebird.map(posts, async (post) => post.toJSON()));
   }),
 );
 
@@ -61,7 +63,7 @@ router.get(
   authenticateAuthToken,
   catchAsync(async (req: Request, res: Response) => {
     const post = await Post.findById(req.params.postId);
-    res.json(post.toJSON());
+    res.json(await post.toJSON());
   }),
 );
 

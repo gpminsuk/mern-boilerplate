@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import bluebird from 'bluebird';
 import { Router, Request, Response } from 'express';
 import Notification from 'src/models/Notification';
 import { logger, catchAsync } from 'src/utils';
@@ -15,7 +16,7 @@ router.get(
     })
       .sort({ createdAt: 'desc' })
       .limit(20);
-    res.json(notifications.map((notification) => notification.toJSON()));
+    res.json(await bluebird.map(notifications, async (notification) => notification.toJSON()));
   }),
 );
 

@@ -4,7 +4,7 @@ import User from 'src/models/User';
 
 export const SECRET_REFRESH_TOKEN = 'SECRET';
 export const SECRET_AUTH_TOKEN = 'SECRET';
-export const AUTH_TOKEN_EXPIRY = 3; //60 * 60 * 24;
+export const AUTH_TOKEN_EXPIRY = 60 * 60 * 24;
 
 export const authenticateAuthToken = [
   jwt({

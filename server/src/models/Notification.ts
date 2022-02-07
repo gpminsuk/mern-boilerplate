@@ -22,7 +22,7 @@ const schema = new Schema<Notification>(
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
     userId: this.userId,

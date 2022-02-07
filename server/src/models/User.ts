@@ -34,7 +34,7 @@ const schema = new Schema<User>(
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
     phone: this.phone,

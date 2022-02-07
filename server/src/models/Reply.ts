@@ -1,11 +1,10 @@
 import { Schema, Types, model } from 'mongoose';
+import Reaction, { ReactionType, ReactionTarget } from './Reaction';
 
 interface Reply {
   userId: Types.ObjectId;
-  location: Number[];
-  like: Number;
+  postId: Types.ObjectId;
   text: String;
-  replyIds: Types.ObjectId[];
   createdAt: Date;
 }
 
@@ -19,13 +18,15 @@ const schema = new Schema<Reply>(
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
-    location: this.location,
-    like: this.like,
+    userId: this.userId,
+    postId: this.postId,
     text: this.text,
-    replyIds: this.replyIds,
+    likeCount:
+      (await Reaction.countDocuments({ target: ReactionTarget.REPLY, targetId: this._id, type: ReactionType.LIKE })) -
+      (await Reaction.countDocuments({ target: ReactionTarget.REPLY, targetId: this._id, type: ReactionType.UNLIKE })),
     createdAt: this.createdAt,
   };
 };

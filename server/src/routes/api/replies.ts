@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import bluebird from 'bluebird';
 import { Router, Request, Response } from 'express';
 import Reply from 'src/models/Reply';
 import { logger, catchAsync } from 'src/utils';
@@ -16,7 +17,7 @@ router.post(
       postId: req.params.postId,
       text: req.body.text,
     });
-    res.json(reply.toJSON());
+    res.json(await reply.toJSON());
   }),
 );
 
@@ -28,7 +29,7 @@ router.get(
     })
       .sort({ createdAt: 'desc' })
       .limit(20);
-    res.json(replies.map((reply) => reply.toJSON()));
+    res.json(await bluebird.map(replies, async (reply) => reply.toJSON()));
   }),
 );
 

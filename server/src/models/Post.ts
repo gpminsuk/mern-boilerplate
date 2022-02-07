@@ -1,32 +1,33 @@
 import { Schema, Types, model } from 'mongoose';
+import Reply from './Reply';
+import Reaction, { ReactionType, ReactionTarget } from './Reaction';
 
 interface Post {
   userId: Types.ObjectId;
   location: Number[];
-  like: Number;
   text: String;
-  replyIds: Types.ObjectId[];
   createdAt: Date;
+  replyCount: Number;
 }
 
 const schema = new Schema<Post>(
   {
     userId: { type: Types.ObjectId, ref: 'User', required: true },
     location: [Number],
-    like: { type: Number, default: 0, required: true },
     text: String,
-    replyIds: { type: Types.ObjectId, ref: 'Reply' },
   },
   { timestamps: true },
 );
 
-schema.methods.toJSON = function () {
+schema.methods.toJSON = async function () {
   return {
     id: this._id,
     location: this.location,
-    like: this.like,
     text: this.text,
-    replyIds: this.replyIds,
+    likeCount:
+      (await Reaction.countDocuments({ target: ReactionTarget.POST, targetId: this._id, type: ReactionType.LIKE })) -
+      (await Reaction.countDocuments({ target: ReactionTarget.POST, targetId: this._id, type: ReactionType.UNLIKE })),
+    replyCount: await Reply.countDocuments({ postId: this._id }),
     createdAt: this.createdAt,
   };
 };
